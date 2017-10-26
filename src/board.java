@@ -148,7 +148,7 @@ public class board {
 				for (a=x-1; a <= x+1; a++) {
 					System.out.printf("testing (%s,%s)\n", a,b );
 					// a and b are contained in the array1 grid
-					if (	 a >= 0 && a < w - 1 && b >= 0 && b < h - 1) {  
+					if (	 a >= 0 && a < w  && b >= 0 && b < h ) {  
 						System.out.printf("(%s,%s)\n", a,b );
 						// if the square contains a bomb, then mines count increments
 						if ( array1[a][b] == 9 ) {
@@ -157,7 +157,7 @@ public class board {
 						}
 					// a or b is outside the array1 grid range
 					} else {
-						System.out.printf("skipped (%s,%s)\n", a,b );	
+						System.out.printf("skipped (%s,%s) because a or b is not within the array\n", a,b );	
 					}
 				}
 			}

@@ -30,25 +30,24 @@ public class board {
 	public void boardsize(int w, int h) {
 		int x,y;
 		int[][] array1 = new int[w][h];
+		String[][] visible = new String[w][h];
 		System.out.println("boardsize");
 		for(x=0; x<w; x++) {
 			for(y=0;y<h;y++) {
 				array1[x][y]=0;
-				System.out.println(x + " " + y);
+				visible[x][y] = "\\s";
 			}
 		}
 	}
-	public void minesgen(int w, int h, int[][] array1, String[][] visible) {
+	public void minesgen(int w, int h, int[][] array1) {
 		System.out.println("within minesgem");
 		int minecount=1;
 		Random rand = new Random();
-		while(minecount<63) {
+		while(minecount<11) {
 			int a = rand.nextInt(w);
 			int b = rand.nextInt(h);
-			System.out.println(a + " " + b);
 			if ( array1[a][b] == 0 ) {
 				array1[a][b] = 9;
-				visible[a][b] = "\b";
 				minecount++;
 			} 
 		}
@@ -69,7 +68,7 @@ public class board {
 		}
 	}
 
-	public void printarray1(int w, int h, String[][] visible) {
+	public void printvisible(int w, int h, String[][] visible) {
 		int x,y;
 		System.out.println("printline method");
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
@@ -84,6 +83,22 @@ public class board {
 		}
 	}
 
+	public void play(int w, int h, int[][] array1, String[][] visible) {
+		int x,y;
+		boolean end = false;
+		while ( end == false) {
+			System.out.printf("enter X:");
+			x = reader.nextInt() - 1;
+			System.out.printf("enter Y:");
+			y = reader.nextInt() - 1;
+
+			if ( array1[x][y] == 9 ) {
+				System.out.println("You lose");
+				printvisible(w,h,visible);
+				end = true;
+			}
+		}
+	}
 
 
 }

@@ -9,9 +9,10 @@ public class minesweeper {
 		int[][] array1 = new int[w][h];
 		String[][] visible = new String[w][h];
 		grid.boardsize(w, h);
-		grid.minesgen(w,h,array1,visible);
+		grid.minesgen(w,h,array1);
 		grid.printline(w, h, array1);
-		grid.printarray1(w, h, visible);
+		grid.printvisible(w, h, visible);
+		grid.play(w, h, array1, visible);
 	}
 
 }

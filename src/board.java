@@ -80,9 +80,10 @@ public class board {
 		}
 	}
 
-	public void play(int w, int h, int[][] array1, String[][] visible) {
+	public int play(int w, int h, int[][] array1, String[][] visible) {
 		int x,y;
 		boolean end = false;
+		int win = 0;
 		while ( end == false) {
 			System.out.printf("enter X:");
 			x = reader.nextInt() - 1;
@@ -90,13 +91,22 @@ public class board {
 			y = reader.nextInt() - 1;
 
 			if ( array1[x][y] == 9 ) {
-				System.out.println("You lose");
-				printvisible(w,h,visible);
 				end = true;
+				win = 0;
 			}
 		}
+		return win;
 	}
-
+	
+	public void status (int w,int h, int[][] array1, int win) {
+		if ( win == 0 ) {
+			System.out.println("Boom, You lose");
+			printline(w,h,array1);
+		} else {
+			System.out.println("You win");
+		}
+		printline(w,h,array1);
+	}
 
 }
 

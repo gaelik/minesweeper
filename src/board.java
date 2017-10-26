@@ -93,12 +93,41 @@ public class board {
 			if ( array1[x][y] == 9 ) {
 				end = true;
 				win = 0;
+			} else { 
+				neighbors(w,h,x,y);
+				printvisible(w,h,visible);
 			}
 		}
 		return win;
 	}
 	
-	public void status (int w,int h, int[][] array1, int win) {
+	public void fillarray1 ( int w, int h, int[][] array1 ) {
+		// prefill array1 putting the amount of neighboring mines
+		//
+//		 |1 2 3 4 5 6 7 8
+//		 -----------------
+//		 1|0 0 0 0 0 0 1 9 
+//		 2|1 1 1 1 1 1 1 1 
+//		 3|3 9 2 1 9 1 0 0 
+//		 4|9 9 2 1 1 1 1 1 
+//		 5|3 2 1 0 1 2 9 1 
+//		 6|9 1 0 0 1 9 3 2 
+//		 7|1 1 0 0 2 2 3 9 
+//		 8|0 0 0 0 1 9 2 1 	
+	}
+	
+	public void neighbors (int w, int h, int x, int y) {
+		//
+		//			  (X-1,Y-1)  (X,Y-1)  (X+1,Y-1) 
+		//            (X-1,Y)      X,Y    (X+1,Y)
+		//            (X-1,Y+1)  (X,Y+1)  (X+1,Y+1)
+		//
+		//   if adjacent square = 0, target it and run neighbors method on it, clone array1 squares
+		//   content within the visible array
+		
+	}
+	
+	public void endresult (int w,int h, int[][] array1, int win) {
 		if ( win == 0 ) {
 			System.out.println("Boom, You lose");
 			printline(w,h,array1);

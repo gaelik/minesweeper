@@ -14,7 +14,7 @@ public class minesweeper {
 		grid.printline(w, h, array1);
 		grid.printvisible(w, h, visible);
 		win = grid.play(w, h, array1, visible);
-		grid.status(w, h, array1, win);
+		grid.endresult(w, h, array1, win);
 	}
 
 }

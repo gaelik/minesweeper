@@ -150,7 +150,7 @@ public class board {
 					// a and b are contained in the array1 grid
 					if (	 a >= 0 && a < w  && b >= 0 && b < h ) {  
 						System.out.printf("(%s,%s)\n", a,b );
-						// if the square contains a bomb, then mines count increments
+						// if the square checked contains a bomb, then mines count increments
 						if ( array1[a][b] == 9 ) {
 							System.out.printf("(%d,%d) => %d mine detected\n", a,b, array1[a][b]);
 							minesdetected++;

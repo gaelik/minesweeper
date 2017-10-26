@@ -27,20 +27,17 @@ public class board {
 	}
 			
 	
-	public void boardsize(int w, int h) {
+	public void boardsize(int w, int h, int[][] array1, String[][] visible) {
 		int x,y;
-		int[][] array1 = new int[w][h];
-		String[][] visible = new String[w][h];
-		System.out.println("boardsize");
 		for(x=0; x<w; x++) {
 			for(y=0;y<h;y++) {
 				array1[x][y]=0;
-				visible[x][y] = "\\s";
+				visible[x][y] = " ";
 			}
 		}
 	}
 	public void minesgen(int w, int h, int[][] array1) {
-		System.out.println("within minesgem");
+		//System.out.println("within minesgem");
 		int minecount=1;
 		Random rand = new Random();
 		while(minecount<11) {
@@ -56,7 +53,7 @@ public class board {
 		
 	public void printline(int w, int h, int[][] array1) {
 		int x,y;
-		System.out.println("printline method");
+		//System.out.println("printline method");
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=0; y<h; y++) {
@@ -76,7 +73,7 @@ public class board {
 		for(y=0; y<h; y++) {
 			System.out.print((y + 1) + "|");
 			for(x=0; x<w;x++) {
-				System.out.print(visible[x][y] + " " );
+				System.out.printf("%s ", visible[x][y] );
 
 			}
 			System.out.println();

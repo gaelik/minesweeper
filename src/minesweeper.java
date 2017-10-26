@@ -1,0 +1,17 @@
+
+public class minesweeper {
+
+	public static void main(String[] args) {
+		board grid = new board();
+		grid.Intro();
+		int w = grid.width();
+		int h = grid.height();
+		int[][] array1 = new int[w][h];
+		String[][] visible = new String[w][h];
+		grid.boardsize(w, h);
+		grid.minesgen(w,h,array1,visible);
+		grid.printline(w, h, array1);
+		grid.printarray1(w, h, visible);
+	}
+
+}

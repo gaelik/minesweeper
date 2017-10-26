@@ -11,6 +11,7 @@ public class minesweeper {
 		int win = 0; 
 		grid.boardsize(w, h, array1, visible);
 		grid.minesgen(w,h,array1);
+		grid.fillarray1(w, h, array1);
 		grid.printline(w, h, array1);
 		grid.printvisible(w, h, visible);
 		win = grid.play(w, h, array1, visible);

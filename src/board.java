@@ -54,10 +54,10 @@ public class board {
 	public void printline(int w, int h, int[][] array1) {
 		int x,y;
 		//System.out.println("printline method");
-		System.out.printf(" |1 2 3 4 5 6 7 8\n");
+		System.out.printf(" |0 1 2 3 4 5 6 7\n");
 		System.out.printf("-----------------\n");
 		for(y=0; y<h; y++) {
-			System.out.print((y + 1) + "|");
+			System.out.print((y) + "|");
 			for(x=0; x<w;x++) {
 				System.out.print(array1[x][y] + " " );
 			}
@@ -85,16 +85,20 @@ public class board {
 		boolean end = false;
 		int win = 0;
 		while ( end == false) {
-			System.out.printf("enter X:");
-			x = reader.nextInt() - 1;
-			System.out.printf("enter Y:");
-			y = reader.nextInt() - 1;
-
+			do {
+				System.out.printf("enter X (1-" + w + "):");
+				x = reader.nextInt() - 1;
+			} while ( x < 0 || x > 7);
+			do {
+				System.out.printf("enter Y (1-" + h + "):");
+				y = reader.nextInt() - 1;
+			} while ( y < 0 || y > 7);
+			
 			if ( array1[x][y] == 9 ) {
 				end = true;
 				win = 0;
 			} else { 
-				neighbors(w,h,x,y);
+				neighbors(w,h,x,y, array1);
 				printvisible(w,h,visible);
 			}
 		}
@@ -104,19 +108,31 @@ public class board {
 	public void fillarray1 ( int w, int h, int[][] array1 ) {
 		// prefill array1 putting the amount of neighboring mines
 		//
-//		 |1 2 3 4 5 6 7 8
+//		  |0 1 2 3 4 5 6 7
 //		 -----------------
-//		 1|0 0 0 0 0 0 1 9 
-//		 2|1 1 1 1 1 1 1 1 
-//		 3|3 9 2 1 9 1 0 0 
-//		 4|9 9 2 1 1 1 1 1 
-//		 5|3 2 1 0 1 2 9 1 
-//		 6|9 1 0 0 1 9 3 2 
-//		 7|1 1 0 0 2 2 3 9 
-//		 8|0 0 0 0 1 9 2 1 	
+//		 0|0 0 0 0 0 0 1 9 
+//		 1|1 1 1 1 1 1 1 1 
+//		 2|3 9 2 1 9 1 0 0 
+//		 3|9 9 2 1 1 1 1 1 
+//		 4|3 2 1 0 1 2 9 1 
+//		 5|9 1 0 0 1 9 3 2 
+//		 6|1 1 0 0 2 2 3 9 
+//		 7|0 0 0 0 1 9 2 1 	
+		int x,y;
+		for(x=0; x<w; x++) {
+			for(y=0;y<h;y++) {
+				System.out.println("within neighbors " + x + " " + y );
+				if ( array1[x][y] == 0 ) {
+					neighbors(w,h,x,y,array1);
+				} else {
+					System.out.printf("Skipping (%d,%d) because of the mine in it\n",x,y);
+				}
+			}
+		}
+		
 	}
 	
-	public void neighbors (int w, int h, int x, int y) {
+	public void neighbors (int w, int h, int x, int y, int[][] array1) {
 		//
 		//			  (X-1,Y-1)  (X,Y-1)  (X+1,Y-1) 
 		//            (X-1,Y)      X,Y    (X+1,Y)
@@ -124,7 +140,32 @@ public class board {
 		//
 		//   if adjacent square = 0, target it and run neighbors method on it, clone array1 squares
 		//   content within the visible array
-		
+		int a = 0,b = 0; 
+		int minesdetected = 0;
+		System.out.printf("center of the grid (%s,%s)\n", x,y );
+		if ( array1[x][y] == 0 ) {
+			for (b = y-1; b<= y+1; b++) {
+				for (a=x-1; a <= x+1; a++) {
+					System.out.printf("testing (%s,%s)\n", a,b );
+					// a and b are contained in the array1 grid
+					if (	 a >= 0 && a < w - 1 && b >= 0 && b < h - 1) {  
+						System.out.printf("(%s,%s)\n", a,b );
+						// if the square contains a bomb, then mines count increments
+						if ( array1[a][b] == 9 ) {
+							System.out.printf("(%d,%d) => %d mine detected\n", a,b, array1[a][b]);
+							minesdetected++;
+						}
+					// a or b is outside the array1 grid range
+					} else {
+						System.out.printf("skipped (%s,%s)\n", a,b );	
+					}
+				}
+			}
+		}
+		// assign the final count to array1 square
+		array1[x][y] = minesdetected;
+		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" );
+		printline(w,h,array1);
 	}
 	
 	public void endresult (int w,int h, int[][] array1, int win) {

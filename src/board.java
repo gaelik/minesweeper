@@ -18,19 +18,21 @@ public class board {
 	public int width() {
 		System.out.print("Input width");
 		w = reader.nextInt();
+		w++;
 		return w;
 			}
 	public int height() {
 		System.out.println("Input height");
 		h = reader.nextInt();
+		h++;
 		return h;
 	}
 			
 	
 	public void boardsize(int w, int h, int[][] array1, String[][] visible) {
 		int x,y;
-		for(x=0; x<w; x++) {
-			for(y=0;y<h;y++) {
+		for(x=1; x<w; x++) {
+			for(y=1;y<h;y++) {
 				array1[x][y]=0;
 				visible[x][y] = "#";
 			}
@@ -54,11 +56,11 @@ public class board {
 	public void printline(int w, int h, int[][] array1) {
 		int x,y;
 		//System.out.println("printline method");
-		System.out.printf(" |0 1 2 3 4 5 6 7\n");
+		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
-		for(y=0; y<h; y++) {
+		for(y=1; y<h; y++) {
 			System.out.print((y) + "|");
-			for(x=0; x<w;x++) {
+			for(x=1; x<w;x++) {
 				System.out.print(array1[x][y] + " " );
 			}
 			System.out.println();
@@ -70,9 +72,9 @@ public class board {
 		System.out.println("printline method");
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
-		for(y=0; y<h; y++) {
-			System.out.print((y + 1) + "|");
-			for(x=0; x<w;x++) {
+		for(y=1; y<h; y++) {
+			System.out.print((y) + "|");
+			for(x=1; x<w;x++) {
 				System.out.printf("%s ", visible[x][y] );
 
 			}
@@ -85,28 +87,30 @@ public class board {
 		boolean end = false;
 		int win = 0;
 		String flag;
-		int plantaflag = 0;
 		while ( end == false) {
 			do {
 				System.out.printf("enter X (1-" + w + "):");
-				x = reader.nextInt() - 1;
-			} while ( x < 0 || x > 7);
+				x = reader.nextInt() ;
+			} while ( x < 1 || x > 8);
 			do {
 				System.out.printf("enter Y (1-" + h + "):");
-				y = reader.nextInt() - 1;
-			} while ( y < 0 || y > 7);
+				y = reader.nextInt() ;
+			} while ( y < 1 || y > 8);
 			System.out.printf("F or not\n");
 			flag = reader.next();
 			System.out.println("flag " + flag);
 			if ( flag.equals("F")) {
 				System.out.println("in flag");
-				plantaflag = 1;
-				visible[x - 1][y - 1] = "F";
+				visible[x][y] = "F";
 			} else if ( array1[x][y] == 9 ) {
 				end = true;
 				win = 0;
-			} else { 
-				neighbors(w,h,x,y, array1);
+			} else {
+				if ( array1[x][y] == 0 ) {
+					visible[x][y] = " ";
+				} else {
+					visible[x][y] = Integer.toString(array1[x][y]);
+				}
 			}
 			printvisible(w,h,visible);
 		}
@@ -127,8 +131,8 @@ public class board {
 //		 6|1 1 0 0 2 2 3 9 
 //		 7|0 0 0 0 1 9 2 1 	
 		int x,y;
-		for(x=0; x<w; x++) {
-			for(y=0;y<h;y++) {
+		for(x=1; x<w; x++) {
+			for(y=1;y<h;y++) {
 				System.out.println("within neighbors " + x + " " + y );
 				if ( array1[x][y] == 0 ) {
 					neighbors(w,h,x,y,array1);
@@ -140,7 +144,7 @@ public class board {
 		
 	}
 	
-	public void neighbors (int w, int h, int x, int y, int[][] array1) {
+	public int neighbors (int w, int h, int x, int y, int[][] array1) {
 		//
 		//			  (X-1,Y-1)  (X,Y-1)  (X+1,Y-1) 
 		//            (X-1,Y)      X,Y    (X+1,Y)
@@ -174,6 +178,7 @@ public class board {
 		array1[x][y] = minesdetected;
 		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" );
 		printline(w,h,array1);
+		return minesdetected;
 	}
 	
 	public void endresult (int w,int h, int[][] array1, int win) {

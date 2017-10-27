@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Random;
 public class board {
 	public int w,h;
-	public int[][] array1;
+	public int[][] secret;
 	public String[][] visible;
 	Scanner reader = new Scanner(System.in);
 //Add instructions for the game
@@ -29,39 +29,39 @@ public class board {
 	}
 			
 	
-	public void boardsize(int w, int h, int[][] array1, String[][] visible) {
+	public void boardsize(int w, int h, int[][] secret, String[][] visible) {
 		int x,y;
 		for(x=1; x<w; x++) {
 			for(y=1;y<h;y++) {
-				array1[x][y]=0;
+				secret[x][y]=0;
 				visible[x][y] = "#";
 			}
 		}
 	}
-	public void minesgen(int w, int h, int[][] array1) {
+	public void minesgen(int w, int h, int[][] secret) {
 		//System.out.println("within minesgem");
 		int minecount=1;
 		Random rand = new Random();
 		while(minecount<11) {
 			int a = rand.nextInt(w);
 			int b = rand.nextInt(h);
-			if ( array1[a][b] == 0 ) {
-				array1[a][b] = 9;
+			if ( secret[a][b] == 0 ) {
+				secret[a][b] = 9;
 				minecount++;
 			} 
 		}
 		
 	}
 		
-	public void printline(int w, int h, int[][] array1) {
+	public void printline(int w, int h, int[][] secret) {
 		int x,y;
-		//System.out.println("printline method");
+		//System.out.println("printline method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
 			System.out.print((y) + "|");
 			for(x=1; x<w;x++) {
-				System.out.print(array1[x][y] + " " );
+				System.out.print(secret[x][y] + " " );
 			}
 			System.out.println();
 		}
@@ -69,7 +69,7 @@ public class board {
 
 	public void printvisible(int w, int h, String[][] visible) {
 		int x,y;
-		System.out.println("printline method");
+		System.out.println("printline method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
@@ -82,18 +82,18 @@ public class board {
 		}
 	}
 
-	public int play(int w, int h, int[][] array1, String[][] visible) {
+	public int play(int w, int h, int[][] secret, String[][] visible) {
 		int x,y;
 		boolean end = false;
 		int win = 0;
 		String flag;
 		while ( end == false) {
 			do {
-				System.out.printf("enter X (1-" + w + "):");
+				System.out.printf("enter X (1-" + ( w - 1 ) + "):");
 				x = reader.nextInt() ;
 			} while ( x < 1 || x > 8);
 			do {
-				System.out.printf("enter Y (1-" + h + "):");
+				System.out.printf("enter Y (1-" + ( h - 1 ) + "):");
 				y = reader.nextInt() ;
 			} while ( y < 1 || y > 8);
 			System.out.printf("F or not\n");
@@ -102,14 +102,14 @@ public class board {
 			if ( flag.equals("F")) {
 				System.out.println("in flag");
 				visible[x][y] = "F";
-			} else if ( array1[x][y] == 9 ) {
+			} else if ( secret[x][y] == 9 ) {
 				end = true;
 				win = 0;
 			} else {
-				if ( array1[x][y] == 0 ) {
+				if ( secret[x][y] == 0 ) {
 					visible[x][y] = " ";
 				} else {
-					visible[x][y] = Integer.toString(array1[x][y]);
+					visible[x][y] = Integer.toString(secret[x][y]);
 				}
 			}
 			printvisible(w,h,visible);
@@ -117,8 +117,8 @@ public class board {
 		return win;
 	}
 	
-	public void fillarray1 ( int w, int h, int[][] array1 ) {
-		// prefill array1 putting the amount of neighboring mines
+	public void fillsecret ( int w, int h, int[][] secret ) {
+		// prefill secret putting the amount of neighboring mines
 		//
 //		  |0 1 2 3 4 5 6 7
 //		 -----------------
@@ -133,62 +133,63 @@ public class board {
 		int x,y;
 		for(x=1; x<w; x++) {
 			for(y=1;y<h;y++) {
-				System.out.println("within neighbors " + x + " " + y );
-				if ( array1[x][y] == 0 ) {
-					neighbors(w,h,x,y,array1);
+				System.out.println("within neighbors " + x + " " + y ); // debug
+				if ( secret[x][y] == 0 ) {
+					neighbors(w,h,x,y,secret);
 				} else {
-					System.out.printf("Skipping (%d,%d) because of the mine in it\n",x,y);
+					System.out.printf("Skipping (%d,%d) because of the mine in it\n",x,y); // debug
 				}
 			}
 		}
 		
 	}
 	
-	public int neighbors (int w, int h, int x, int y, int[][] array1) {
+	public int neighbors (int w, int h, int x, int y, int[][] secret) {
 		//
 		//			  (X-1,Y-1)  (X,Y-1)  (X+1,Y-1) 
 		//            (X-1,Y)      X,Y    (X+1,Y)
 		//            (X-1,Y+1)  (X,Y+1)  (X+1,Y+1)
 		//
-		//   if adjacent square = 0, target it and run neighbors method on it, clone array1 squares
+		//   if adjacent square = 0, target it and run neighbors method on it, clone secret squares
 		//   content within the visible array
 		int a = 0,b = 0; 
 		int minesdetected = 0;
-		System.out.printf("center of the grid (%s,%s)\n", x,y );
-		if ( array1[x][y] == 0 ) {
+		System.out.printf("center of the grid (%s,%s)\n", x,y );   // debug
+		if ( secret[x][y] == 0 ) {
 			for (b = y-1; b<= y+1; b++) {
 				for (a=x-1; a <= x+1; a++) {
 					System.out.printf("testing (%s,%s)\n", a,b );
-					// a and b are contained in the array1 grid
-					if (	 a >= 0 && a < w  && b >= 0 && b < h ) {  
-						System.out.printf("(%s,%s)\n", a,b );
+					// a and b are contained in the secret grid
+					if (	 a > 0 && a < w  && b > 0 && b < h ) {  
+						System.out.printf("(%s,%s)\n", a,b );  // debug
 						// if the square checked contains a bomb, then mines count increments
-						if ( array1[a][b] == 9 ) {
-							System.out.printf("(%d,%d) => %d mine detected\n", a,b, array1[a][b]);
+						if ( secret[a][b] == 9 ) {
+							System.out.printf("(%d,%d) => %d mine detected\n", a,b, secret[a][b]); // debug
 							minesdetected++;
 						}
-					// a or b is outside the array1 grid range
+					// a or b is outside the secret grid range
 					} else {
-						System.out.printf("skipped (%s,%s) because a or b is not within the array\n", a,b );	
+						System.out.printf("skipped (%s,%s) because a or b is not within the array\n", a,b );	 // debug
 					}
 				}
 			}
 		}
-		// assign the final count to array1 square
-		array1[x][y] = minesdetected;
-		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" );
-		printline(w,h,array1);
+		// assign the final count to secret square
+		secret[x][y] = minesdetected;
+		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" ); // debug
+		printline(w,h,secret);
 		return minesdetected;
 	}
 	
-	public void endresult (int w,int h, int[][] array1, int win) {
+		
+	public void endresult (int w,int h, int[][] secret, int win) {
 		if ( win == 0 ) {
 			System.out.println("Boom, You lose");
-			printline(w,h,array1);
+			printline(w,h,secret);
 		} else {
 			System.out.println("You win");
 		}
-		printline(w,h,array1);
+		printline(w,h,secret);
 	}
 
 }

@@ -97,21 +97,18 @@ public class board {
 			} while ( y < 0 || y > 7);
 			System.out.printf("F or not\n");
 			flag = reader.next();
-			if ( flag == "F" ) {
+			System.out.println("flag " + flag);
+			if ( flag.equals("F")) {
 				System.out.println("in flag");
 				plantaflag = 1;
 				visible[x - 1][y - 1] = "F";
-			} else { 
-				plantaflag = 0;
-			}
-			
-			if ( array1[x][y] == 9 ) {
+			} else if ( array1[x][y] == 9 ) {
 				end = true;
 				win = 0;
 			} else { 
 				neighbors(w,h,x,y, array1);
-				printvisible(w,h,visible);
 			}
+			printvisible(w,h,visible);
 		}
 		return win;
 	}

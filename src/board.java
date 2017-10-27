@@ -35,7 +35,7 @@ public class board {
 			for(y=1;y<h;y++) {
 				secret[x][y]=0;
 				visible[x][y] = "#";
-				System.out.printf("%d,%d = %d\n", x, y , secret[x][y] );
+				//System.out.printf("%d,%d = %d\n", x, y , secret[x][y] );
 			}
 		}
 	}
@@ -55,7 +55,6 @@ public class board {
 		
 	public void displaysecret(int w, int h, int[][] secret) {
 		int x,y;
-		//System.out.println("displaysecret method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
@@ -69,7 +68,6 @@ public class board {
 
 	public void displayvisible(int w, int h, String[][] visible) {
 		int x,y;
-		System.out.println("displaysecret method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
@@ -136,11 +134,8 @@ public class board {
 		int x,y;
 		for(x=1; x<w; x++) {
 			for(y=1;y<h;y++) {
-				System.out.println("within neighbors " + x + " " + y ); // debug
 				if ( secret[x][y] == 0 ) {
 					neighbors(w,h,x,y,secret);
-				} else {
-					System.out.printf("Skipping (%d,%d) because of the mine in it\n",x,y); // debug
 				}
 			}
 		}
@@ -157,30 +152,23 @@ public class board {
 		//   content within the visible array
 		int a = 0,b = 0; 
 		int minesdetected = 0;
-		System.out.printf("center of the grid (%s,%s)\n", x,y );   // debug
 		if ( secret[x][y] == 0 ) {
 			for (b = y-1; b<= y+1; b++) {
 				for (a=x-1; a <= x+1; a++) {
-					System.out.printf("testing (%s,%s)\n", a,b );
+					//System.out.printf("testing (%s,%s)\n", a,b );
 					// a and b are contained in the secret grid
 					if (	 a > 0 && a < w  && b > 0 && b < h ) {  
-						System.out.printf("(%s,%s)\n", a,b );  // debug
 						// if the square checked contains a bomb, then mines count increments
 						if ( secret[a][b] == 9 ) {
-							System.out.printf("(%d,%d) => %d mine detected\n", a,b, secret[a][b]); // debug
 							minesdetected++;
 						}
 					// a or b is outside the secret grid range
-					} else {
-						System.out.printf("skipped (%s,%s) because a or b is not within the array\n", a,b );	 // debug
 					}
 				}
 			}
 		}
 		// assign the final count to secret square
 		secret[x][y] = minesdetected;
-		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" ); // debug
-		displaysecret(w,h,secret);
 		return minesdetected;
 	}
 	

@@ -60,7 +60,7 @@ public class board {
 		for(y=1; y<h; y++) {
 			System.out.print((y) + "|");
 			for(x=1; x<w;x++) {
-				System.out.print(secret[x][y] + " " );
+					System.out.print(secret[x][y] + " " );
 			}
 			System.out.println();
 		}
@@ -96,7 +96,6 @@ public class board {
 			} while ( y < 1 || y > 8);
 			System.out.printf("Enter f to add or remove a flag, any other key to continue:");
 			flag = reader.next();
-			System.out.println("flag " + flag);
 			if ( flag.equals("f")) {
 				if ( visible[x][y].equals("#")) {
 					visible[x][y] = "F";

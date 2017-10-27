@@ -10,10 +10,10 @@ public class minesweeper {
 		String[][] visible = new String[w][h];
 		int win = 0; 
 		grid.boardsize(w, h, secret, visible);
-		grid.minesgen(w,h,secret);
-		grid.fillsecret(win, h, secret);
-		grid.printline(w, h, secret);
-		grid.printvisible(w, h, visible);
+		grid.generatemines(w,h,secret);
+		grid.fillsecret(w, h, secret);
+		grid.displaysecret(w, h, secret);
+		grid.displayvisible(w, h, visible);
 		win = grid.play(w, h, secret, visible);
 		grid.endresult(w, h, secret, win);
 	}

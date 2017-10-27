@@ -35,11 +35,11 @@ public class board {
 			for(y=1;y<h;y++) {
 				secret[x][y]=0;
 				visible[x][y] = "#";
+				System.out.printf("%d,%d = %d\n", x, y , secret[x][y] );
 			}
 		}
 	}
-	public void minesgen(int w, int h, int[][] secret) {
-		//System.out.println("within minesgem");
+	public void generatemines(int w, int h, int[][] secret) {
 		int minecount=1;
 		Random rand = new Random();
 		while(minecount<11) {
@@ -53,9 +53,9 @@ public class board {
 		
 	}
 		
-	public void printline(int w, int h, int[][] secret) {
+	public void displaysecret(int w, int h, int[][] secret) {
 		int x,y;
-		//System.out.println("printline method");  // debug
+		//System.out.println("displaysecret method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
@@ -67,9 +67,9 @@ public class board {
 		}
 	}
 
-	public void printvisible(int w, int h, String[][] visible) {
+	public void displayvisible(int w, int h, String[][] visible) {
 		int x,y;
-		System.out.println("printline method");  // debug
+		System.out.println("displaysecret method");  // debug
 		System.out.printf(" |1 2 3 4 5 6 7 8\n");
 		System.out.printf("-----------------\n");
 		for(y=1; y<h; y++) {
@@ -89,19 +89,22 @@ public class board {
 		String flag;
 		while ( end == false) {
 			do {
-				System.out.printf("enter X (1-" + ( w - 1 ) + "):");
+				System.out.printf("Enter X (1-" + ( w - 1 ) + "):");
 				x = reader.nextInt() ;
 			} while ( x < 1 || x > 8);
 			do {
-				System.out.printf("enter Y (1-" + ( h - 1 ) + "):");
+				System.out.printf("Enter Y (1-" + ( h - 1 ) + "):");
 				y = reader.nextInt() ;
 			} while ( y < 1 || y > 8);
-			System.out.printf("F or not\n");
+			System.out.printf("Enter f to add or remove a flag, any other key to continue:");
 			flag = reader.next();
 			System.out.println("flag " + flag);
-			if ( flag.equals("F")) {
-				System.out.println("in flag");
-				visible[x][y] = "F";
+			if ( flag.equals("f")) {
+				if ( visible[x][y].equals("#")) {
+					visible[x][y] = "F";
+				} else if (visible[x][y].equals("F")) {
+					visible[x][y] = "#";
+				}
 			} else if ( secret[x][y] == 9 ) {
 				end = true;
 				win = 0;
@@ -112,7 +115,7 @@ public class board {
 					visible[x][y] = Integer.toString(secret[x][y]);
 				}
 			}
-			printvisible(w,h,visible);
+			displayvisible(w,h,visible);
 		}
 		return win;
 	}
@@ -177,7 +180,7 @@ public class board {
 		// assign the final count to secret square
 		secret[x][y] = minesdetected;
 		System.out.println("Assigning " + minesdetected + " to (" + x + "," + y + ")" ); // debug
-		printline(w,h,secret);
+		displaysecret(w,h,secret);
 		return minesdetected;
 	}
 	
@@ -185,11 +188,10 @@ public class board {
 	public void endresult (int w,int h, int[][] secret, int win) {
 		if ( win == 0 ) {
 			System.out.println("Boom, You lose");
-			printline(w,h,secret);
 		} else {
 			System.out.println("You win");
 		}
-		printline(w,h,secret);
+		displaysecret(w,h,secret);
 	}
 
 }

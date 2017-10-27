@@ -102,17 +102,24 @@ public class board {
 				} else if (visible[x][y].equals("F")) {
 					visible[x][y] = "#";
 				}
+			} else if ( visible[x][y].equals("F")) {
+				System.out.println("This is a flagged square, please unflag it first before targeting it");
 			} else if ( secret[x][y] == 9 ) {
 				end = true;
 				win = 0;
 			} else {
 				if ( secret[x][y] == 0 ) {
 					visible[x][y] = " ";
+					uncovervisible(w,h, secret,visible);
 				} else {
 					visible[x][y] = Integer.toString(secret[x][y]);
 				}
 			}
 			displayvisible(w,h,visible);
+			if ( uncoveredsquares(w,h,visible) == 10) {
+				win = 1;
+				end = true;
+			}
 		}
 		return win;
 	}
@@ -147,8 +154,7 @@ public class board {
 		//            (X-1,Y)      X,Y    (X+1,Y)
 		//            (X-1,Y+1)  (X,Y+1)  (X+1,Y+1)
 		//
-		//   if adjacent square = 0, target it and run neighbors method on it, clone secret squares
-		//   content within the visible array
+		//   scan the 8 possible adjacents squares, if they contain 9, increment minesdetected.
 		int a = 0,b = 0; 
 		int minesdetected = 0;
 		if ( secret[x][y] == 0 ) {
@@ -161,7 +167,6 @@ public class board {
 						if ( secret[a][b] == 9 ) {
 							minesdetected++;
 						}
-					// a or b is outside the secret grid range
 					}
 				}
 			}
@@ -169,6 +174,64 @@ public class board {
 		// assign the final count to secret square
 		secret[x][y] = minesdetected;
 		return minesdetected;
+	}
+	
+	public int neighborsvisible (int w, int h, int x, int y, int[][] secret, String[][] visible) {
+		//
+		//			  (X-1,Y-1)  (X,Y-1)  (X+1,Y-1) 
+		//            (X-1,Y)      X,Y    (X+1,Y)
+		//            (X-1,Y+1)  (X,Y+1)  (X+1,Y+1)
+		//
+		//   scan the 8 possible adjacents squares, if they contain a value > 0 in the secret array, copy it into visible
+		int a = 0,b = 0; 
+		int moretoscan = 0;
+		if ( secret[x][y] == 0 ) {
+			for (b = y-1; b<= y+1; b++) {
+				for (a=x-1; a <= x+1; a++) {
+					//System.out.printf("testing (%s,%s)\n", a,b );
+					// a and b are contained in the visible grid
+					if (	 a > 0 && a < w  && b > 0 && b < h ) {  
+						if ( secret[a][b] > 0 && visible[a][b].equals("#") ) {
+							visible[a][b] = Integer.toString(secret[a][b]);
+						} else if ( secret[a][b] == 0 && visible[a][b].equals("#"))  {
+							visible[a][b] = " ";   // if we find an empty square, trigger another run of uncovervisible
+							moretoscan++;
+						}
+					}
+				}
+			}
+		}
+		return moretoscan;
+	}
+	
+	public void uncovervisible ( int w, int h, int[][] secret, String[][] visible) {
+		int notdoneyet = 1;
+		int x,y;
+		while ( notdoneyet > 0 ) {
+			for(x=1; x<w; x++) {
+				for(y=1;y<h;y++) {
+					if ( visible[x][y].equals(" ")) {
+						notdoneyet = neighborsvisible(w,h, x,y, secret, visible);
+					}
+				}
+			}
+		}
+	}
+	
+	public int uncoveredsquares ( int w, int h, String[][] visible) {
+		int howmanyleft = 0;
+		int x,y;
+
+			for(x=1; x<w; x++) {
+				for(y=1;y<h;y++) {
+					if ( visible[x][y].equals("#")) {
+						howmanyleft++;
+					} else if (visible[x][y].equals("F") ) {
+						howmanyleft++;
+					}
+				}
+			}
+			return howmanyleft;
 	}
 	
 		

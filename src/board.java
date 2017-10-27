@@ -32,7 +32,7 @@ public class board {
 		for(x=0; x<w; x++) {
 			for(y=0;y<h;y++) {
 				array1[x][y]=0;
-				visible[x][y] = " ";
+				visible[x][y] = "#";
 			}
 		}
 	}
@@ -84,6 +84,8 @@ public class board {
 		int x,y;
 		boolean end = false;
 		int win = 0;
+		String flag;
+		int plantaflag = 0;
 		while ( end == false) {
 			do {
 				System.out.printf("enter X (1-" + w + "):");
@@ -93,6 +95,15 @@ public class board {
 				System.out.printf("enter Y (1-" + h + "):");
 				y = reader.nextInt() - 1;
 			} while ( y < 0 || y > 7);
+			System.out.printf("F or not\n");
+			flag = reader.next();
+			if ( flag == "F" ) {
+				System.out.println("in flag");
+				plantaflag = 1;
+				visible[x - 1][y - 1] = "F";
+			} else { 
+				plantaflag = 0;
+			}
 			
 			if ( array1[x][y] == 9 ) {
 				end = true;
